@@ -18,7 +18,7 @@ __plugin_meta__ = PluginMetadata(
     name="省流",
     description="总结群友怪话",
     usage=__usage__,
-    homepage="https://github.com/ChenXu233/nonebot_plugin_summary",
+    homepage="https://github.com/ChenXu233/nonebot-plugin-summary",
     type="application",
     supported_adapters=inherit_supported_adapters(
         "nonebot_plugin_chatrecorder", "nonebot_plugin_saa", "nonebot_plugin_alconna"
