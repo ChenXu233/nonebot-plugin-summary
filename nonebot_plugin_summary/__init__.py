@@ -15,7 +15,7 @@ from .utils import __usage__, get_records, build_records, OpenAIModel
 from .config import Config, plugin_config
 
 __plugin_meta__ = PluginMetadata(
-    name="AI总结",
+    name="省流",
     description="总结群友怪话",
     usage=__usage__,
     homepage="https://github.com/ChenXu233/nonebot_plugin_summary",
