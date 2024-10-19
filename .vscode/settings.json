@@ -1,7 +1,11 @@
 {
     "cSpell.words": [
         "alconna",
+        "Apifox",
         "chatrecorder",
-        "httpx"
+        "displayname",
+        "httpx",
+        "sqlalchemy",
+        "userinfo"
     ]
 }
