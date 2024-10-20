@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-summary"
-version = "0.1.1alpha2"
+version = "0.1.2alpha1"
 description = "AI总结群聊消息，再也不用一直爬楼了！"
 authors = [
     {name = "ChenXu233", email = "Woyerpa@outlook.com"},
@@ -10,7 +10,6 @@ dependencies = [
     "nonebot-plugin-chatrecorder>=0.6.2",
     "nonebot-plugin-send-anything-anywhere>=0.7.1",
     "nonebot-plugin-alconna>=0.53.0",
-    "requests>=2.32.3",
     "httpx>=0.27.2",
     "nonebot-plugin-userinfo>=0.2.6",
 ]
