@@ -10,8 +10,8 @@
 nonebot-plugin-summary
 
 <p align="center">
-  <a href="https://pypi.python.org/pypi/nonebot-plugin-dialectlist">
-    <img src="https://img.shields.io/pypi/v/nonebot-plugin-dialectlist.svg" alt="pypi">
+  <a href="https://pypi.python.org/pypi/nonebot-plugin-summary">
+    <img src="https://img.shields.io/pypi/v/nonebot-plugin-summary.svg" alt="pypi">
   </a>
   
   <img src="https://img.shields.io/badge/python-3.9+-blue.svg" alt="python">
