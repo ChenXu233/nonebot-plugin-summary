@@ -52,10 +52,10 @@ nonebot-plugin-summary
 
 在 .env 中，可以添加以下配置项
 ```python
-SUMMARY_TOKEN=your_token #必填！！
-SUMMARY_ENDPOINT=https://api.gpt.ge/v1/chat/completions #可选，默认为 https://api.gpt.ge/v1/chat/completions
-SUMMARY_MODEL_NAME=gpt-4o-mini #可选，默认为 gpt-4o-mini
-SUMMRAY_DEFAULT_CONTEXT=100 #可选，默认为 100,获取上下文数量
+SUMMARY__TOKEN=your_token #必填！！
+SUMMARY__ENDPOINT=https://api.gpt.ge/v1/chat/completions #可选，默认为 https://api.gpt.ge/v1/chat/completions
+SUMMARY__MODEL_NAME=gpt-4o-mini #可选，默认为 gpt-4o-mini
+SUMMARY__DEFAULT_CONTEXT=100 #可选，默认为 100,获取上下文数量
 ```
 ### ⚠ 注意！！
 必须填写TOKEN，否则无法使用！TOKEN就是API_KEY！理论上支持所有OpenAI格式的访问和返回。
