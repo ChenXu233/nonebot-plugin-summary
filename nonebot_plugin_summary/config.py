@@ -4,8 +4,7 @@ from nonebot import get_driver, get_plugin_config
 
 class ScopedConfig(BaseModel):
     default_context: int = 100
-    prompt: str = """
-你是一款专业的文本总结助手。你的主要任务是从聊天记录中提取关键信息，不包含任何其他多余的信息或解释。
+    prompt: str = """你是一款专业的文本总结助手。你的主要任务是从聊天记录中提取关键信息，不包含任何其他多余的信息或解释。
 
 能力：
 从长段落中识别并提取关键信息。
@@ -20,8 +19,7 @@ class ScopedConfig(BaseModel):
 格式：
 1.{事件1}：{事件1的简单描述}
 2.{事件2}：{事件2的简单描述}
-....
-"""
+...."""
     token: str
     base_url: str = "https://api.gpt.ge/v1/chat/completions"
     model_name: str = "gpt-4o-mini"
