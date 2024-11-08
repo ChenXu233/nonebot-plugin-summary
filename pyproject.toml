@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-summary"
-version = "0.2.1"
+version = "0.2.2"
 description = "AI总结群聊消息，再也不用一直爬楼了！"
 authors = [
     {name = "ChenXu233", email = "Woyerpa@outlook.com"},

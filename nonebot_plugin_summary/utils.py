@@ -1,6 +1,5 @@
 import abc
 import inspect
-import httpx
 
 from typing import List
 from openai import AsyncOpenAI
@@ -36,14 +35,16 @@ __usage__ = inspect.cleandoc(
 class BaseLLMModel(abc.ABC):
     def __init__(self, prompt: str):
         self.prompt = prompt
-        self.http_client = httpx.AsyncClient()
 
     @abc.abstractmethod
     async def post_content(self, string: str) -> str:
         raise NotImplementedError
 
     async def summary(self, string: str) -> str:
-        return await self.post_content(string)
+        try:
+            return await self.post_content(string)
+        except Exception as e:
+            return f"请求错误\n{e}"
 
     async def set_prompt(self, prompt: str) -> None:
         self.prompt = prompt
