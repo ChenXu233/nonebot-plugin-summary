@@ -24,6 +24,8 @@ class ScopedConfig(BaseModel):
     base_url: str = "https://api.gpt.ge/v1"
     model_name: str = "gpt-4o-mini"
 
+    class Config:
+        protected_namespaces = ()
 
 class Config(BaseModel):
     summary: ScopedConfig
