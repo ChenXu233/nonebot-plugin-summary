@@ -56,7 +56,7 @@ class OpenAIModel(BaseLLMModel):
         self.model_name = model_name
         self.api_key = api_key
         self.endpoint = endpoint
-        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint)
+        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint,timeout=60)
 
     async def post_content(self, string: str) -> str:
         completion = await self.client.beta.chat.completions.parse(
