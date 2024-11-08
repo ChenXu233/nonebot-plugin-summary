@@ -1,6 +1,6 @@
 [project]
 name = "nonebot-plugin-summary"
-version = "0.2.0"
+version = "0.2.1"
 description = "AI总结群聊消息，再也不用一直爬楼了！"
 authors = [
     {name = "ChenXu233", email = "Woyerpa@outlook.com"},
@@ -14,6 +14,7 @@ dependencies = [
     "nonebot-plugin-userinfo>=0.2.6",
     "nonebot-plugin-session-orm>=0.2.0",
     "nonebot-plugin-orm>=0.7.6",
+    "openai>=1.54.3",
 ]
 requires-python = ">=3.9,<=3.13"
 readme = "README.md"

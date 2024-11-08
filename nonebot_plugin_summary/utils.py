@@ -3,6 +3,7 @@ import inspect
 import httpx
 
 from typing import List
+from openai import AsyncOpenAI
 from sqlalchemy import or_, select
 
 from nonebot_plugin_chatrecorder.model import MessageRecord
@@ -38,11 +39,11 @@ class BaseLLMModel(abc.ABC):
         self.http_client = httpx.AsyncClient()
 
     @abc.abstractmethod
-    async def post_content(self, prompt: str, string: str) -> str:
+    async def post_content(self, string: str) -> str:
         raise NotImplementedError
 
     async def summary(self, string: str) -> str:
-        return await self.post_content(self.prompt, string)
+        return await self.post_content(string)
 
     async def set_prompt(self, prompt: str) -> None:
         self.prompt = prompt
@@ -54,26 +55,20 @@ class OpenAIModel(BaseLLMModel):
         self.model_name = model_name
         self.api_key = api_key
         self.endpoint = endpoint
+        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint)
 
-    async def post_content(self, prompt: str, string: str) -> str:
-        headers = {
-            "Authorization": f"Bearer {self.api_key}",
-            "User-Agent": "Apifox/1.0.0 (https://apifox.com)",
-            "Content-Type": "application/json",
-        }
-        data = {
-            "model": self.model_name,
-            "messages": [
-                {"role": "system", "content": prompt},
-                {"role": "user", "content": string},
+    async def post_content(self, string: str) -> str:
+        completion = await self.client.beta.chat.completions.parse(
+            model=self.model_name,
+            messages=[
+                {"role": "system", "content": self.prompt},
+
+                {"role": "user", "content": string}
             ],
-            "max_tokens": 1688,
-            "temperature": 0.5,
-            "stream": False,
-        }
-        data = await self.http_client.post(self.endpoint, headers=headers, json=data)
-        print(data.json())
-        return data.json()["choices"][0]["message"]["content"]
+        )
+        if not completion.choices[0].message.content:
+            return "生产内容错误，请检查模型是否可用"
+        return completion.choices[0].message.content
 
 
 models = {"OpenAI": OpenAIModel}

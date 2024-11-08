@@ -21,7 +21,7 @@ class ScopedConfig(BaseModel):
 2.{事件2}：{事件2的简单描述}
 ...."""
     token: str
-    base_url: str = "https://api.gpt.ge/v1/chat/completions"
+    base_url: str = "https://api.gpt.ge/v1"
     model_name: str = "gpt-4o-mini"
 
 
