@@ -29,12 +29,12 @@ nonebot-plugin-summary
 通过`pip`或`nb`安装：
 
 - 通过 pip 安装
-```python
+```shell
 pip install nonebot-plugin-summary
 ```
 
 - 通过 nb-cli安装
-```python
+```shell
 nb plugin install nonebot-plugin-summary
 ```
 
