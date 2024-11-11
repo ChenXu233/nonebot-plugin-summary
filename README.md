@@ -26,15 +26,17 @@ nonebot-plugin-summary
 
 ## 💿 安装
 
-通过`pip`或`nb`安装；
+通过`pip`或`nb`安装：
 
->**通过 pip **安装
+- 通过 pip 安装
+```shell
+pip install nonebot-plugin-summary
+```
 
-`pip install nonebot-plugin-summary`
-
->**通过 nb **安装
-
-`nb plugin install nonebot-plugin-summary`
+- 通过 nb-cli安装
+```shell
+nb plugin install nonebot-plugin-summary
+```
 
 ### ✅ 插件依赖于
 
