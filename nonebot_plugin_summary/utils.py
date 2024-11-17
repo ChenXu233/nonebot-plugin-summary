@@ -1,8 +1,8 @@
 import abc
 import inspect
+import httpx
 
 from typing import List
-from openai import AsyncOpenAI
 from sqlalchemy import or_, select
 
 from nonebot_plugin_chatrecorder.model import MessageRecord
@@ -12,6 +12,9 @@ from nonebot_plugin_session_orm import get_session_by_persist_id, SessionModel
 from nonebot_plugin_session import Session
 
 from .config import plugin_config
+from datetime import datetime
+
+from tzlocal import get_localzone
 
 
 __usage__ = inspect.cleandoc(
@@ -35,16 +38,14 @@ __usage__ = inspect.cleandoc(
 class BaseLLMModel(abc.ABC):
     def __init__(self, prompt: str):
         self.prompt = prompt
+        self.http_client = httpx.AsyncClient()
 
     @abc.abstractmethod
-    async def post_content(self, string: str) -> str:
+    async def post_content(self, prompt: str, string: str) -> str:
         raise NotImplementedError
 
     async def summary(self, string: str) -> str:
-        try:
-            return await self.post_content(string)
-        except Exception as e:
-            return f"请求错误\n{e}"
+        return await self.post_content(self.prompt, string)
 
     async def set_prompt(self, prompt: str) -> None:
         self.prompt = prompt
@@ -56,20 +57,27 @@ class OpenAIModel(BaseLLMModel):
         self.model_name = model_name
         self.api_key = api_key
         self.endpoint = endpoint
-        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint,timeout=60)
 
-    async def post_content(self, string: str) -> str:
-        completion = await self.client.beta.chat.completions.parse(
-            model=self.model_name,
-            messages=[
-                {"role": "system", "content": self.prompt},
-
-                {"role": "user", "content": string}
+    async def post_content(self, prompt: str, string: str) -> str:
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "User-Agent": "Apifox/1.0.0 (https://apifox.com)",
+            "Content-Type": "application/json",
+        }
+        data = {
+            "model": self.model_name,
+            "messages": [
+                {"role": "system", "content": prompt},
+                {"role": "user", "content": string},
             ],
-        )
-        if not completion.choices[0].message.content:
-            return "生产内容错误，请检查模型是否可用"
-        return completion.choices[0].message.content
+            "max_tokens": 4095,
+            "temperature": 0.5,
+            "stream": False,
+        }
+        print(string)
+        data = await self.http_client.post(self.endpoint, headers=headers, json=data, timeout=1800)
+        print(data.json())
+        return data.json()["choices"][0]["message"]["content"]
 
 
 models = {"OpenAI": OpenAIModel}
@@ -77,6 +85,10 @@ models = {"OpenAI": OpenAIModel}
 
 async def build_records(bot, event, records: List[MessageRecord]) -> str:
     s = ""
+    local_tz = get_localzone()
+    local_now = datetime.now(local_tz)
+    offset = local_now.utcoffset()  # Returns a timedelta
+
     for i in records:
         session = await get_session_by_persist_id(i.session_persist_id)
         user_id = session.id1
@@ -91,7 +103,8 @@ async def build_records(bot, event, records: List[MessageRecord]) -> str:
             else user_info.user_name if user_info.user_name else user_info.user_id
         )
         msg = i.plain_text
-        s += f"{name}:{msg}\n"
+        s += f"\"{name}\"在{(i.time + offset).replace(tzinfo=local_tz).strftime('%Y-%m-%d %H:%M:%S')}说:{msg}\n"
+    s+="\n\n现在的时间是"+ datetime.now().strftime('%Y-%m-%d %H:%M:%S')
     return s
 
 

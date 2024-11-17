@@ -4,9 +4,6 @@ require("nonebot_plugin_saa")
 require("nonebot_plugin_alconna")
 require("nonebot_plugin_chatrecorder")
 require("nonebot_plugin_userinfo")
-require("nonebot_plugin_session")
-require("nonebot_plugin_session_orm")
-require("nonebot_plugin_orm")
 import nonebot_plugin_saa as saa
 from nonebot_plugin_alconna import Alconna, Args, Option, on_alconna
 from nonebot_plugin_session import Session, extract_session
