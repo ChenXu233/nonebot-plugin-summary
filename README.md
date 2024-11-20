@@ -26,15 +26,17 @@ nonebot-plugin-summary
 
 ## 💿 安装
 
-通过`pip`或`nb`安装；
+通过`pip`或`nb`安装：
 
->**通过 pip **安装
+- 通过 pip 安装
+```shell
+pip install nonebot-plugin-summary
+```
 
-`pip install nonebot-plugin-summary`
-
->**通过 nb **安装
-
-`nb plugin install nonebot-plugin-summary`
+- 通过 nb-cli安装
+```shell
+nb plugin install nonebot-plugin-summary
+```
 
 ### ✅ 插件依赖于
 
@@ -53,7 +55,7 @@ nonebot-plugin-summary
 在 .env 中，可以添加以下配置项
 ```python
 SUMMARY__TOKEN = your_token #必填！！
-SUMMARY__ENDPOINT = "https://api.gpt.ge/v1/chat/completions" #可选，默认为 https://api.gpt.ge/v1/chat/completions
+SUMMARY__BASE_URL = "https://api.gpt.ge/v1/chat/completions" #可选，默认为 https://api.gpt.ge/v1/chat/completions
 SUMMARY__MODEL_NAME = "gpt-4o-mini" #可选，默认为 gpt-4o-mini
 SUMMARY__DEFAULT_CONTEXT = 100 #可选，默认为 100,获取上下文数量
 ```
