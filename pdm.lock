@@ -5,7 +5,7 @@
 groups = ["default"]
 strategy = ["inherit_metadata"]
 lock_version = "4.5.0"
-content_hash = "sha256:9356109abda732f083d7c3209d2495b1e3e928bfef1cad054e0b310ef6a31d5b"
+content_hash = "sha256:121bcc3712c275e9b8b33e3ac8b03342a79c9dd8577491baacb9b7f2dae8c06d"
 
 [[metadata.targets]]
 requires_python = ">=3.10,<3.13"
@@ -1262,6 +1262,34 @@ marker = "python_version >= \"3.10\" and python_version < \"3.13\""
 files = [
     {file = "typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d"},
     {file = "typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8"},
+]
+
+[[package]]
+name = "tzdata"
+version = "2024.2"
+requires_python = ">=2"
+summary = "Provider of IANA time zone data"
+groups = ["default"]
+marker = "python_version >= \"3.10\" and python_version < \"3.13\" and platform_system == \"Windows\""
+files = [
+    {file = "tzdata-2024.2-py2.py3-none-any.whl", hash = "sha256:a48093786cdcde33cad18c2555e8532f34422074448fbc874186f0abd79565cd"},
+    {file = "tzdata-2024.2.tar.gz", hash = "sha256:7d85cc416e9382e69095b7bdf4afd9e3880418a2413feec7069d533d6b4e31cc"},
+]
+
+[[package]]
+name = "tzlocal"
+version = "5.2"
+requires_python = ">=3.8"
+summary = "tzinfo object for the local timezone"
+groups = ["default"]
+marker = "python_version >= \"3.10\" and python_version < \"3.13\""
+dependencies = [
+    "backports-zoneinfo; python_version < \"3.9\"",
+    "tzdata; platform_system == \"Windows\"",
+]
+files = [
+    {file = "tzlocal-5.2-py3-none-any.whl", hash = "sha256:49816ef2fe65ea8ac19d19aa7a1ae0551c834303d5014c6d5a62e4cbda8047b8"},
+    {file = "tzlocal-5.2.tar.gz", hash = "sha256:8d399205578f1a9342816409cc1e46a93ebd5755e39ea2d85334bea911bf0e6e"},
 ]
 
 [[package]]
