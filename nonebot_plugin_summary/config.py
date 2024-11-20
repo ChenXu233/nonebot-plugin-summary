@@ -1,5 +1,6 @@
 from pydantic import BaseModel
 from nonebot import get_driver, get_plugin_config
+from nonebot.log import logger
 
 
 class ScopedConfig(BaseModel):
@@ -30,3 +31,5 @@ class Config(BaseModel):
 
 global_config = get_driver().config
 plugin_config = get_plugin_config(Config).summary
+
+logger.info(plugin_config.model_dump_json())
