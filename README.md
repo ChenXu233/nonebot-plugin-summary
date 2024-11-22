@@ -55,7 +55,7 @@ nb plugin install nonebot-plugin-summary
 在 .env 中，可以添加以下配置项
 ```python
 SUMMARY__TOKEN = your_token #必填！！
-SUMMARY__BASE_URL = "https://api.gpt.ge/v1/chat/completions" #可选，默认为 https://api.gpt.ge/v1/chat/completions
+SUMMARY__BASE_URL = "https://api.gpt.ge/v1" #可选，默认为 https://api.gpt.ge/v1
 SUMMARY__MODEL_NAME = "gpt-4o-mini" #可选，默认为 gpt-4o-mini
 SUMMARY__DEFAULT_CONTEXT = 100 #可选，默认为 100,获取上下文数量
 ```
@@ -123,6 +123,18 @@ __注意！！__
 ### 🎀TODO
 
 - [x] 适配全平台
+
+- [ ] 实现转发消息总结
+
+- [ ] 实现总结以转发消息发送
+
+- [ ] 实现总结以图片发送
+
+- [ ] 提供总结接口
+
+- [ ] 实现总结特定人的消息总结
+
+- [ ] 实现总结跳转
 
 - [ ] 移除HIM
   
