@@ -58,6 +58,17 @@ summary = on_alconna(
     block=True,
 )
 
+ladder = on_alconna(
+    Alconna(
+        "爬楼",
+        Args["-i|--index", int],
+    ),
+    extensions=[ReplyRecordExtension()],
+    use_cmd_start=True,
+    priority=5,
+    block=True,
+)
+
 
 @summary.handle()
 async def _(
@@ -136,3 +147,17 @@ async def _(
         await saa.AggregatedMessageFactory([saa.Text(response)]).finish()
     else:
         await saa.Text(response).finish(reply=True)
+
+# TODO: 数据库储存
+@ladder.handle()
+async def _(
+    bot: Bot,
+    event: Event,
+    index:Match[int],
+    ext: ReplyRecordExtension,
+    msg_id:MsgId,
+    session: Session = Depends(extract_session)
+):  
+    if reply := ext.get_reply(msg_id):
+        reply_id = reply.id
+        ...
