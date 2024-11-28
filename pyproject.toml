@@ -16,6 +16,7 @@ dependencies = [
     "nonebot-plugin-orm>=0.7.6",
     "openai>=1.54.3",
     "tzlocal>=5.2",
+    "beautifulsoup4>=4.12.3",
 ]
 requires-python = ">=3.9,<=3.13"
 readme = "README.md"

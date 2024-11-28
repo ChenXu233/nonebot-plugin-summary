@@ -1,5 +1,6 @@
 import re
 import httpx
+from bs4 import BeautifulSoup
 from nonebot import require
 
 require("nonebot_plugin_saa")
@@ -81,7 +82,8 @@ async def _(
 
         if match := re.match(r"^(https?|http?):\/\/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:\d{2,5})?(\/[a-zA-Z0-9._%+-\/\?=&#]*)?$", reply_msg):
             res = await HTTPX_CLIENT.get(match[0])
-            reply_msg = res.text
+            reply_msg = BeautifulSoup(res.text, "html.parser")
+            reply_msg = reply_msg.text
         
         await model.set_prompt(plugin_config.url_prompt)
         response = await model.summary(reply_msg)
