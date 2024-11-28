@@ -23,6 +23,7 @@ markdown列表，每一个事件为一项，格式要求如下
     token: str
     base_url: str = "https://api.gpt.ge/v1"
     model_name: str = "gpt-4o-mini"
+    timezone: str = "Asia/Shanghai"
 
     class Config:
         protected_namespaces = ()

@@ -101,7 +101,8 @@ async def build_records(bot, event, records: List[MessageRecord]) -> str:
 
 
 async def get_records(
-    session: Session, number: int = plugin_config.default_context
+    session: Session,
+    number: int = plugin_config.default_context
 ) -> List[MessageRecord]:
     where = [
         or_(SessionModel.id2 == session.id2),
