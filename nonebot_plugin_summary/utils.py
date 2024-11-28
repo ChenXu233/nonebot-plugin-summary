@@ -57,15 +57,14 @@ class OpenAIModel(BaseLLMModel):
         self.model_name = model_name
         self.api_key = api_key
         self.endpoint = endpoint
-        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint,timeout=60)
+        self.client = AsyncOpenAI(api_key=api_key, base_url=endpoint, timeout=60)
 
     async def post_content(self, string: str) -> str:
         completion = await self.client.beta.chat.completions.parse(
             model=self.model_name,
             messages=[
                 {"role": "system", "content": self.prompt},
-
-                {"role": "user", "content": string}
+                {"role": "user", "content": string},
             ],
         )
         if not completion.choices[0].message.content:
@@ -74,6 +73,7 @@ class OpenAIModel(BaseLLMModel):
 
 
 models = {"OpenAI": OpenAIModel}
+
 
 async def build_records(bot, event, records: List[MessageRecord]) -> str:
     s = ""
@@ -95,14 +95,13 @@ async def build_records(bot, event, records: List[MessageRecord]) -> str:
             else user_info.user_name if user_info.user_name else user_info.user_id
         )
         msg = i.plain_text
-        s += f"\"{name}\"在{(i.time + offset).replace(tzinfo=local_tz).strftime('%Y-%m-%d %H:%M:%S')}说:{msg}\n" # type: ignore
-    s+="\n\n现在的时间是"+ datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+        s += f"\"{name}\"在{(i.time + offset).replace(tzinfo=local_tz).strftime('%Y-%m-%d %H:%M:%S')}说:{msg}\n"  # type: ignore
+    s += "\n\n现在的时间是" + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return s
 
 
 async def get_records(
-    session: Session,
-    number: int = plugin_config.default_context
+    session: Session, number: int = plugin_config.default_context
 ) -> List[MessageRecord]:
     where = [
         or_(SessionModel.id2 == session.id2),

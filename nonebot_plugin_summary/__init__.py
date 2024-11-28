@@ -21,7 +21,10 @@ from nonebot.adapters import Bot, Event
 from nonebot.params import Depends
 
 from .utils import __usage__, build_records, OpenAIModel
-from .time import get_datetime_fromisoformat_with_timezone, get_datetime_now_with_timezone
+from .time import (
+    get_datetime_fromisoformat_with_timezone,
+    get_datetime_now_with_timezone,
+)
 from .config import Config, plugin_config
 
 __plugin_meta__ = PluginMetadata(
@@ -74,14 +77,14 @@ ladder = on_alconna(
 async def _(
     bot: Bot,
     event: Event,
-    num:Match[int],
-    id:Match[str],
-    group:Match[str],
-    time:Match[str],
+    num: Match[int],
+    id: Match[str],
+    group: Match[str],
+    time: Match[str],
     ext: ReplyRecordExtension,
-    msg_id:MsgId,
-    session: Session = Depends(extract_session)
-):  
+    msg_id: MsgId,
+    session: Session = Depends(extract_session),
+):
     if reply := ext.get_reply(msg_id):
         reply_msg = reply
         if not reply_msg.msg:
@@ -91,11 +94,14 @@ async def _(
         else:
             reply_msg = reply_msg.msg.extract_plain_text()
 
-        if match := re.match(r"^(https?|http?):\/\/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:\d{2,5})?(\/[a-zA-Z0-9._%+-\/\?=&#]*)?$", reply_msg):
+        if match := re.match(
+            r"^(https?|http?):\/\/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:\d{2,5})?(\/[a-zA-Z0-9._%+-\/\?=&#]*)?$",
+            reply_msg,
+        ):
             res = await HTTPX_CLIENT.get(match[0])
             reply_msg = BeautifulSoup(res.text, "html.parser")
             reply_msg = reply_msg.text
-        
+
         await model.set_prompt(plugin_config.url_prompt)
         response = await model.summary(reply_msg)
         if plugin_config.aggregate_message:
@@ -109,31 +115,33 @@ async def _(
         group_id = [session.id2]
     else:
         await saa.Text("请指定群聊或在群聊中使用").finish()
-    
+
     if num.available:
         number = num.result
     else:
         number = plugin_config.default_context
-    
+
     if id.available:
         user_id = [id.result]
     else:
         user_id = None
-    
+
     dt = get_datetime_now_with_timezone()
     time_start = dt.replace(hour=0, minute=0, second=0, microsecond=0)
     time_stop = dt
     if time.available:
         time_ = time.result
         if match := re.match(r"^(.+?)(?:~(.+))?$", time_):
-                start = match[1]
-                stop = match[2]
-                time_start = get_datetime_fromisoformat_with_timezone(start)
-                time_stop = get_datetime_fromisoformat_with_timezone(stop)
+            start = match[1]
+            stop = match[2]
+            time_start = get_datetime_fromisoformat_with_timezone(start)
+            time_stop = get_datetime_fromisoformat_with_timezone(stop)
 
     if not time_start or not time_stop:
-        await saa.Text("请正确输入时间格式，例如：2024-01-01~2024-01-14，不然我没法理解哦~").finish()
-    
+        await saa.Text(
+            "请正确输入时间格式，例如：2024-01-01~2024-01-14，不然我没法理解哦~"
+        ).finish()
+
     raw_record = await get_message_records(
         id2s=group_id,
         id1s=user_id,
@@ -148,16 +156,17 @@ async def _(
     else:
         await saa.Text(response).finish(reply=True)
 
+
 # TODO: 数据库储存
 @ladder.handle()
 async def _(
     bot: Bot,
     event: Event,
-    index:Match[int],
+    index: Match[int],
     ext: ReplyRecordExtension,
-    msg_id:MsgId,
-    session: Session = Depends(extract_session)
-):  
+    msg_id: MsgId,
+    session: Session = Depends(extract_session),
+):
     if reply := ext.get_reply(msg_id):
         reply_id = reply.id
         ...

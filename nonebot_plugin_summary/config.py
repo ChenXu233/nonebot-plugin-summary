@@ -20,15 +20,16 @@ markdown列表，每一个事件为一项，格式要求如下
 ...
 """
     )
-    url_prompt:str = """你是一个专业的html文件总结员，请你总结以下html中的信息。"""
+    url_prompt: str = """你是一个专业的html文件总结员，请你总结以下html中的信息。"""
     token: str
     base_url: str = "https://api.gpt.ge/v1"
     model_name: str = "gpt-4o-mini"
     timezone: str = "Asia/Shanghai"
-    aggregate_message:bool = True
+    aggregate_message: bool = True
 
     class Config:
         protected_namespaces = ()
+
 
 class Config(BaseModel):
     summary: ScopedConfig
