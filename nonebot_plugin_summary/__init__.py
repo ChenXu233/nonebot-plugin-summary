@@ -1,4 +1,5 @@
 import re
+import httpx
 from nonebot import require
 
 require("nonebot_plugin_saa")
@@ -9,7 +10,8 @@ require("nonebot_plugin_session")
 require("nonebot_plugin_session_orm")
 require("nonebot_plugin_orm")
 import nonebot_plugin_saa as saa
-from nonebot_plugin_alconna import Alconna, Args, Option, on_alconna, Match
+from nonebot_plugin_alconna import Alconna, Args, Option, on_alconna, Match, MsgId
+from nonebot_plugin_alconna.builtins.extensions import ReplyRecordExtension
 from nonebot_plugin_session import Session, extract_session
 from nonebot_plugin_chatrecorder import get_message_records
 
@@ -38,6 +40,7 @@ model = OpenAIModel(
     plugin_config.model_name,
     plugin_config.base_url,
 )
+HTTPX_CLIENT = httpx.AsyncClient()
 
 summary = on_alconna(
     Alconna(
@@ -47,6 +50,7 @@ summary = on_alconna(
         Option("-g", Args["group?", str]),
         Option("-t", Args["time?", str]),
     ),
+    extensions=[ReplyRecordExtension()],
     aliases={"总结", "总结一下"},
     use_cmd_start=True,
     priority=5,
@@ -62,8 +66,30 @@ async def _(
     id:Match[str],
     group:Match[str],
     time:Match[str],
+    ext: ReplyRecordExtension,
+    msg_id:MsgId,
     session: Session = Depends(extract_session)
-):
+):  
+    if reply := ext.get_reply(msg_id):
+        reply_msg = reply
+        if not reply_msg.msg:
+            raise Exception("获取消息内容错误，请重试。")
+        if isinstance(reply_msg.msg, str):
+            reply_msg = reply_msg.msg
+        else:
+            reply_msg = reply_msg.msg.extract_plain_text()
+
+        if match := re.match(r"^(https?|http?):\/\/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:\d{2,5})?(\/[a-zA-Z0-9._%+-\/\?=&#]*)?$", reply_msg):
+            res = await HTTPX_CLIENT.get(match[0])
+            reply_msg = res.text
+        
+        await model.set_prompt(plugin_config.url_prompt)
+        response = await model.summary(reply_msg)
+        if plugin_config.aggregate_message:
+            await saa.AggregatedMessageFactory([saa.Text(response)]).finish()
+        else:
+            await saa.Text(response).finish(reply=True)
+
     if group.available:
         group_id = [group.result]
     elif session.id2:
@@ -104,4 +130,7 @@ async def _(
     raw_record = raw_record[-number:]
     record = await build_records(bot, event, raw_record)
     response = await model.summary(record)
-    await saa.Text(response).send(reply=True)
+    if plugin_config.aggregate_message:
+        await saa.AggregatedMessageFactory([saa.Text(response)]).finish()
+    else:
+        await saa.Text(response).finish(reply=True)
