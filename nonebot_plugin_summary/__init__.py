@@ -95,7 +95,7 @@ async def _(
             reply_msg = reply_msg.msg.extract_plain_text()
 
         if match := re.match(
-            r"^(https?|http?):\/\/([a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}|localhost)(:\d{2,5})?(\/[a-zA-Z0-9._%+-\/\?=&#]*)?$",
+            r'(?:(?:https?://)?(?:www\.)?|(?:http?://)?|(?:www\.)?)(?:[a-zA-Z0-9-]+\.[a-zA-Z]{2,6}|[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3})(?:/[\w-._~:/?#[\]@!$&\'()*+,;=.]+)?',
             reply_msg,
         ):
             res = await HTTPX_CLIENT.get(match[0])

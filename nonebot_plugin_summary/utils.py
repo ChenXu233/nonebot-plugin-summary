@@ -81,6 +81,7 @@ async def build_records(bot, event, records: List[MessageRecord]) -> str:
     local_now = datetime.now(local_tz)
     offset = local_now.utcoffset()  # Returns a timedelta
 
+    index = 1
     for i in records:
         session = await get_session_by_persist_id(i.session_persist_id)
         user_id = session.id1
@@ -95,7 +96,8 @@ async def build_records(bot, event, records: List[MessageRecord]) -> str:
             else user_info.user_name if user_info.user_name else user_info.user_id
         )
         msg = i.plain_text
-        s += f"\"{name}\"在{(i.time + offset).replace(tzinfo=local_tz).strftime('%Y-%m-%d %H:%M:%S')}说:{msg}\n"  # type: ignore
+        s += f"{index}. \"{name}\"在{(i.time + offset).replace(tzinfo=local_tz).strftime('%Y-%m-%d %H:%M:%S')}说:{msg}\n"  # type: ignore
+        index += 1
     s += "\n\n现在的时间是" + datetime.now().strftime("%Y-%m-%d %H:%M:%S")
     return s
 
